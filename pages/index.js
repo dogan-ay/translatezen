@@ -1,8 +1,9 @@
 import Head from "next/head"
 import TextareaAutosize from 'react-textarea-autosize';
+import LangMenu from "@/components/LangMenu";
 
 
-export default function Home() {
+export default function Home({langs}) {
   return (
     <>
     <Head>
@@ -12,12 +13,16 @@ export default function Home() {
     </Head>
      <main>
         <div className="panel">
-          <span className="panel-center"><p>⇄</p></span>
+          <LangMenu langs={langs}/>
+          <span className="panel-center">
+            <p>⇄</p>
+          </span>
+          <LangMenu langs={langs}/>
         </div>
         <div className="container">
           <div className="text-container first-container">
             <div className="textarea-wrapper">
-            <TextareaAutosize autoFocus placeholder="Lorem ipsum dolor"/>
+            <TextareaAutosize minRows={6} autoFocus placeholder="Lorem ipsum dolor"/>
 
             </div>
             <div className="text-selections">
@@ -44,10 +49,19 @@ export default function Home() {
               </span>
             </div>
           </div>  
-
         </div>   
-
      </main>
     </>
   )
+}
+
+export async function getStaticProps() {
+  const res = await fetch('https://libretranslate.com/languages');
+  const langs = await res.json();
+
+  return {
+    props: {
+      langs
+    }
+  }
 }
